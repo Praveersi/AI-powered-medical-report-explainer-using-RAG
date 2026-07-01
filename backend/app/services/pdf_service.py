@@ -1,11 +1,24 @@
 import fitz          # PyMuPDF — import name is fitz, not pymupdf
 import pdfplumber
 import os
-from typing import List, Dict
-
-
 import re
-import fitz
+import shutil
+from typing import List, Dict
+from fastapi import UploadFile
+
+def save_upload(upload_file: UploadFile, destination_path: str) -> str:
+    """
+    Saves an uploaded FastAPI file stream safely onto the server storage disk.
+    Creates parent directories dynamically if they do not exist.
+    """
+    # Ensure directory path exists
+    os.makedirs(os.path.dirname(destination_path), exist_ok=True)
+    
+    # Streams file data in chunks to handle large medical documents efficiently
+    with open(destination_path, "wb") as buffer:
+        shutil.copyfileobj(upload_file.file, buffer)
+        
+    return destination_path
 
 def clean_extracted_text(text: str) -> str:
     """
@@ -30,7 +43,6 @@ def extract_text_with_pymupdf(pdf_path: str) -> str:
     Returns one big string with page separators.
     """
     text_parts = []
-
     doc = fitz.open(pdf_path)
 
     for page_num in range(len(doc)):
@@ -61,8 +73,6 @@ def extract_tables_with_pdfplumber(pdf_path: str) -> str:
         for page_num, page in enumerate(pdf.pages):
 
             # extract_tables() returns a list of tables
-            # each table is a list of rows
-            # each row is a list of cell values
             tables = page.extract_tables()
 
             if not tables:
@@ -106,10 +116,7 @@ def extract_tables_with_pdfplumber(pdf_path: str) -> str:
 def extract_pdf(pdf_path: str) -> Dict[str, str]:
     """
     Main function — extracts both text and tables from a PDF.
-    Returns a dict with:
-      - 'text'  : raw text from all pages
-      - 'tables': formatted table rows
-      - 'combined': merged text + tables (used by RAG pipeline)
+    Returns a dict with raw text, structured tables, and a combined payload.
     """
     # Safety check — does the file exist?
     if not os.path.exists(pdf_path):
@@ -142,10 +149,13 @@ def extract_pdf(pdf_path: str) -> Dict[str, str]:
         "page_count": _get_page_count(pdf_path)
     }
 
-
 def _get_page_count(pdf_path: str) -> int:
     """Helper — returns total number of pages in the PDF."""
     doc = fitz.open(pdf_path)
     count = len(doc)
     doc.close()
     return count
+
+# ALIAS EXPORT: Maps extract_pdf to the legacy extract_document_text layout 
+# so that router dependencies in app.routers.ingest load seamlessly!
+extract_document_text = extract_pdf
