@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.routers import ingest
 
 app = FastAPI(title="Medical Report Explainer", version="1.0.0")
 
@@ -10,6 +11,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(ingest.router, prefix="/api")
 
 # Health check — always add this
 @app.get("/")
