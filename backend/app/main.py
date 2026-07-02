@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import ingest, analyse   # ← add analyse
+from app.routers import ingest, analyse, query   # ← add query
 
 app = FastAPI(title="Medical Report Explainer", version="1.0.0")
 
@@ -12,8 +12,9 @@ app.add_middleware(
 )
 
 app.include_router(ingest.router)
-app.include_router(analyse.router)   # ← add this
+app.include_router(analyse.router)
+app.include_router(query.router)   # ← add this
 
 @app.get("/")
 async def health():
-    return {"status": "Medical Report Explainer API is running"}
+    return {"status": "Medical Report Explainer API is running"} 

@@ -1,24 +1,50 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from typing import List, Optional
 from enum import Enum
 
+
+# ── Enums ─────────────────────────────────────────────────
 class Severity(str, Enum):
-    LOW = "low"
-    MEDIUM = "medium"
-    HIGH = "high"
+    HIGH   = "high"    # value significantly above normal
+    LOW    = "low"     # value significantly below normal
+    BORDER = "borderline"
     NORMAL = "normal"
 
+
+# ── Ingest ────────────────────────────────────────────────
+class IngestResponse(BaseModel):
+    doc_id: str
+    filename: str
+    page_count: int
+    char_count: int
+    chunk_count: int        # filled in Phase 3
+    message: str
+
+
+# ── Analysis ──────────────────────────────────────────────
 class Flag(BaseModel):
-    name: str = Field(..., description="The name of the metric or test, e.g., Hemoglobin.")
-    value: str = Field(..., description="The user's test result value.")
-    unit: Optional[str] = Field(None, description="The measurement unit, e.g., g/dL, mg/dL.")
-    normal_range: str = Field(..., description="The standard healthy reference bounds.")
-    severity: Severity = Field(default=Severity.NORMAL, description="Calculated urgency band.")
-    plain_english: str = Field(..., description="A simple explanation of what this test variance means.")
+    name: str               # e.g. "Haemoglobin"
+    value: str              # e.g. "9.2"
+    unit: Optional[str]     # e.g. "g/dL"
+    normal_range: str       # e.g. "13.5 – 17.5"
+    severity: Severity
+    plain_english: str      # one plain-English sentence
+
 
 class AnalysisResult(BaseModel):
-    doc_id: str = Field(..., description="The underlying tracking identifier.")
-    summary: str = Field(..., description="High level plain English synthesis of the health report.")
-    flags: List[Flag] = Field(default=[], description="Extracted medical anomalies.")
-    doctor_questions: List[str] = Field(default=[], description="Smart follow-up questions to help a patient talk to their provider.")
-    disclaimer: str = Field(default="Please consult a qualified doctor.")
+    doc_id: str
+    summary: str            # overall plain-English paragraph
+    flags: List[Flag]       # list of abnormal values
+    doctor_questions: List[str]
+    disclaimer: str
+
+
+# ── Query ─────────────────────────────────────────────────
+class QueryRequest(BaseModel):
+    doc_id: str
+    question: str
+
+
+class QueryResponse(BaseModel):
+    answer: str
+    source_chunks: List[str]
