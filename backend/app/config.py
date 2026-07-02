@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from groq import Groq
 
 load_dotenv() 
 
@@ -11,8 +12,8 @@ class Settings:
     CHUNK_SIZE: int = int(os.getenv("CHUNK_SIZE", "400"))
     CHUNK_OVERLAP: int = int(os.getenv("CHUNK_OVERLAP", "60"))
     TOP_K_CHUNKS: int = int(os.getenv("TOP_K_CHUNKS", "6"))
-    MAX_FILE_MB: int = int(os.getenv("MAX_FILE_MB", "15")) 
-
+    MAX_FILE_MB: int = int(os.getenv("MAX_FILE_MB", "15"))                                       
+ 
     # Derived paths
     @property
     def UPLOADS_DIR(self) -> str:
@@ -20,6 +21,8 @@ class Settings:
 
     @property
     def INDEXES_DIR(self) -> str:
-        return os.path.join(self.STORAGE_DIR, "indexes")
+        return os.path.join(self.STORAGE_DIR, "indexes") 
 
 settings = Settings() 
+
+groq_client = Groq(api_key=settings.GROQ_API_KEY) 
