@@ -11,29 +11,50 @@ export default function DoctorQuestions({ questions }) {
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">💬</span>
-          <h2 className="font-semibold text-gray-800">Questions to Ask Your Doctor</h2>
+    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+      {/* Header */}
+      <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between"
+        style={{ background: "linear-gradient(90deg,#FFF7ED,#FFFBEB)" }}>
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center"
+            style={{ background: "linear-gradient(135deg,#F59E0B,#EF4444)" }}>
+            <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+          </div>
+          <div>
+            <h2 className="font-display font-bold text-slate-900">Questions to Ask Your Doctor</h2>
+            <p className="text-xs text-slate-400">Take these to your next consultation</p>
+          </div>
         </div>
         <button
           onClick={copyAll}
-          className="text-xs text-blue-600 hover:underline"
+          className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border transition-all
+            ${copied
+              ? "bg-emerald-50 text-emerald-600 border-emerald-200"
+              : "bg-white text-slate-500 border-slate-200 hover:border-slate-400"}`}
         >
-          {copied ? "✅ Copied!" : "📋 Copy all"}
+          {copied ? (
+            <><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg> Copied!</>
+          ) : (
+            <><svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg> Copy all</>
+          )}
         </button>
       </div>
-      <ol className="space-y-2">
+
+      {/* Questions */}
+      <div className="p-5 space-y-3">
         {questions.map((q, i) => (
-          <li key={i} className="flex gap-3 items-start">
-            <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full text-xs flex items-center justify-center font-medium mt-0.5">
+          <div key={i} className="flex gap-4 items-start p-4 bg-amber-50/50 border border-amber-100 rounded-xl">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 text-xs font-bold text-white"
+              style={{ background: "linear-gradient(135deg,#F59E0B,#EF4444)" }}>
               {i + 1}
-            </span>
-            <p className="text-sm text-gray-700 leading-relaxed">{q}</p>
-          </li>
+            </div>
+            <p className="text-sm text-slate-700 leading-relaxed">{q}</p> 
+          </div> 
         ))}
-      </ol>
+      </div>
     </div>
   )
 }
