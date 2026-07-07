@@ -1,3 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
-@tailwind utilities; 
+@tailwind utilities;
+
+:root {
+  --navy:   #0F172A;
+  --slate:  #1E293B;
+  --sky:    #0EA5E9;
+  --sky-lt: #38BDF8;
+  --teal:   #0D9488;
+  --muted:  #64748B;
+  --border: #E2E8F0;
+  --card:   #FFFFFF;
+  --bg:     #F8FAFC;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--navy);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+/* ── Heartbeat SVG line animation ── */
+.heartbeat-path {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: draw 2s ease forwards, pulse 3s ease-in-out 2s infinite;
+}
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ── Hero gradient ── */
+.hero-gradient {
+  background: linear-gradient(135deg, #0F172A 0%, #1E3A5F 50%, #0F2D40 100%);
+}
+
+/* ── Card hover lift ── */
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(14,165,233,0.12);
+}
+
+/* ── Severity badge pulse ── */
+.badge-high   { background: #FEE2E2; color: #DC2626; border: 1px solid #FECACA; }
+.badge-low    { background: #DBEAFE; color: #1D4ED8; border: 1px solid #BFDBFE; }
+.badge-border { background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; }
+.badge-normal { background: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; }
+
+/* ── Progress bar shimmer ── */
+.shimmer {
+  background: linear-gradient(90deg, #0EA5E9 0%, #38BDF8 50%, #0EA5E9 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Typing dots ── */
+.dot-bounce { animation: bounce 1.2s infinite; }
+.dot-bounce:nth-child(2) { animation-delay: 0.2s; }
+.dot-bounce:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); }
+  40%           { transform: translateY(-6px); }
+}
+
+/* ── Fade-in for results ── */
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Scrollbar styling ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #F1F5F9; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 10px; }
+
+/* ── Chat input focus ── */
+.chat-input:focus {
+  outline: none;
+  border-color: #0EA5E9;
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+}
