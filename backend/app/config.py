@@ -23,3 +23,9 @@ class Settings:
         return os.path.join(self.STORAGE_DIR, "indexes")
 
 settings = Settings() 
+# Add this import at the top of config.py
+from groq import Groq
+
+# Add these lines at the bottom of config.py
+# Groq client — initialised once, reused everywhere
+groq_client = Groq(api_key=settings.GROQ_API_KEY)
