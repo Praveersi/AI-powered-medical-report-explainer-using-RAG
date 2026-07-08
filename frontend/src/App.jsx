@@ -21,9 +21,17 @@ export default function App() {
       {/* Header */}
       <header className="bg-surface border-b border-line">
         <div className="max-w-3xl mx-auto px-5 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="font-semibold text-ink leading-none">Report Explainer</h1>
-            <p className="text-xs text-muted mt-1">Plain-English lab results, in minutes</p>
+          <div className="flex items-center gap-2.5">
+            <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+              <rect width="26" height="26" rx="6" fill="#0e6b5c" />
+              <circle cx="11" cy="11" r="5" stroke="#ffffff" strokeWidth="1.6" fill="none" />
+              <path d="M14.8 14.8L19 19" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" />
+              <path d="M8.6 11h2M11 8.6v2" stroke="#ffffff" strokeWidth="1.3" strokeLinecap="round" />
+            </svg>
+            <div>
+              <h1 className="font-semibold text-ink leading-none">MedLens</h1>
+              <p className="text-xs text-muted mt-1">Plain-English lab results, in minutes</p>
+            </div>
           </div>
 
           {isDone && (

@@ -1,13 +1,13 @@
 import { useState } from "react"
 import Icon from "./Icon"
 
-// Severity → visual treatment. Colours are deliberately muted, not alarm-bright —
-// this is a health tool, not a warning dashboard.
+// Severity → visual treatment. Anything abnormal (high/low/borderline) reads as
+// red so it's a single unambiguous "needs attention" signal — only normal is teal.
 const SEVERITY_CONFIG = {
-  high: { bg: "bg-danger-soft", border: "border-danger-line", badge: "bg-danger/10 text-danger", label: "High" },
-  low: { bg: "bg-info-soft", border: "border-info-line", badge: "bg-info/10 text-info", label: "Low" },
-  borderline: { bg: "bg-warn-soft", border: "border-warn-line", badge: "bg-warn/10 text-warn", label: "Borderline" },
-  normal: { bg: "bg-primary-soft", border: "border-primary-line", badge: "bg-primary/10 text-primary", label: "Normal" },
+  high: { bg: "bg-danger-soft", border: "border-danger-line", badge: "bg-danger/15 text-danger", value: "text-danger", label: "High" },
+  low: { bg: "bg-danger-soft", border: "border-danger-line", badge: "bg-danger/15 text-danger", value: "text-danger", label: "Low" },
+  borderline: { bg: "bg-danger-soft", border: "border-danger-line", badge: "bg-danger/15 text-danger", value: "text-danger", label: "Borderline" },
+  normal: { bg: "bg-primary-soft", border: "border-primary-line", badge: "bg-primary/15 text-primary", value: "text-ink", label: "Normal" },
 }
 
 function FlagCard({ flag }) {
@@ -20,11 +20,11 @@ function FlagCard({ flag }) {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm font-semibold text-ink">{flag.name}</span>
-            <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${cfg.badge}`}>
+            <span className={`text-[11px] px-2 py-0.5 rounded font-semibold ${cfg.badge}`}>
               {cfg.label}
             </span>
           </div>
-          <p className="text-base font-bold text-ink mt-0.5">
+          <p className={`text-base font-bold mt-0.5 ${cfg.value}`}>
             {flag.value}{" "}
             {flag.unit && <span className="text-sm font-normal text-muted">{flag.unit}</span>}
           </p>
