@@ -1,11 +1,13 @@
 import { useState } from "react"
+import Icon from "./Icon"
 
-// Severity → colour + icon mapping
+// Severity → visual treatment. Colours are deliberately muted, not alarm-bright —
+// this is a health tool, not a warning dashboard.
 const SEVERITY_CONFIG = {
-  high:       { bg: "bg-red-50",    border: "border-red-300",    badge: "bg-red-100 text-red-700",    icon: "🔴", label: "High"       },
-  low:        { bg: "bg-blue-50",   border: "border-blue-300",   badge: "bg-blue-100 text-blue-700",   icon: "🔵", label: "Low"        },
-  borderline: { bg: "bg-amber-50",  border: "border-amber-300",  badge: "bg-amber-100 text-amber-700",  icon: "🟡", label: "Borderline" },
-  normal:     { bg: "bg-green-50",  border: "border-green-300",  badge: "bg-green-100 text-green-700",  icon: "🟢", label: "Normal"     },
+  high: { bg: "bg-danger-soft", border: "border-danger-line", badge: "bg-danger/10 text-danger", label: "High" },
+  low: { bg: "bg-info-soft", border: "border-info-line", badge: "bg-info/10 text-info", label: "Low" },
+  borderline: { bg: "bg-warn-soft", border: "border-warn-line", badge: "bg-warn/10 text-warn", label: "Borderline" },
+  normal: { bg: "bg-primary-soft", border: "border-primary-line", badge: "bg-primary/10 text-primary", label: "Normal" },
 }
 
 function FlagCard({ flag }) {
@@ -13,32 +15,33 @@ function FlagCard({ flag }) {
   const cfg = SEVERITY_CONFIG[flag.severity] || SEVERITY_CONFIG.normal
 
   return (
-    <div className={`border rounded-lg p-3 ${cfg.bg} ${cfg.border}`}>
-
+    <div className={`border rounded-lg p-3.5 ${cfg.bg} ${cfg.border}`}>
       <div className="flex items-start justify-between gap-2">
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-sm font-semibold text-gray-800">{flag.name}</span>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${cfg.badge}`}>
-              {cfg.icon} {cfg.label}
+            <span className="text-sm font-semibold text-ink">{flag.name}</span>
+            <span className={`text-[11px] px-2 py-0.5 rounded-full font-medium ${cfg.badge}`}>
+              {cfg.label}
             </span>
           </div>
-          <p className="text-base font-bold text-gray-900 mt-0.5">
-            {flag.value} {flag.unit && <span className="text-sm font-normal text-gray-500">{flag.unit}</span>}
+          <p className="text-base font-bold text-ink mt-0.5">
+            {flag.value}{" "}
+            {flag.unit && <span className="text-sm font-normal text-muted">{flag.unit}</span>}
           </p>
-          <p className="text-xs text-gray-500">Normal range: {flag.normal_range}</p>
+          <p className="text-xs text-muted">Normal range: {flag.normal_range}</p>
         </div>
 
         <button
-          onClick={() => setExpanded(e => !e)}
-          className="text-gray-400 hover:text-gray-600 text-xs flex-shrink-0 mt-1"
+          onClick={() => setExpanded((e) => !e)}
+          className="text-muted hover:text-ink text-xs flex items-center gap-1 shrink-0 mt-1 transition-colors"
         >
-          {expanded ? "▲ Less" : "▼ Explain"}
+          {expanded ? "Less" : "Explain"}
+          <Icon name={expanded ? "chevronUp" : "chevronDown"} className="w-3.5 h-3.5" />
         </button>
       </div>
 
       {expanded && (
-        <p className="mt-2 text-sm text-gray-700 leading-relaxed border-t border-gray-200 pt-2">
+        <p className="mt-3 text-sm text-ink/80 leading-relaxed border-t border-ink/10 pt-3">
           {flag.plain_english}
         </p>
       )}
@@ -49,31 +52,27 @@ function FlagCard({ flag }) {
 export default function AbnormalFlags({ flags }) {
   const [filter, setFilter] = useState("all")
 
-  const abnormal = flags.filter(f => f.severity !== "normal")
+  const abnormal = flags.filter((f) => f.severity !== "normal")
   const displayed = filter === "all" ? flags : abnormal
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">🔬</span>
-          <h2 className="font-semibold text-gray-800">Test Results</h2>
-          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-            {flags.length} tests
-          </span>
-        </div>
+    <div className="bg-surface border border-line rounded-lg p-4">
+      <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+        <h2 className="font-semibold text-ink text-sm">Test results ({flags.length})</h2>
 
-         <div className="flex gap-1">
-          {["all", "abnormal"].map(f => (
+        <div className="flex gap-1.5">
+          {["all", "abnormal"].map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`text-xs px-3 py-1 rounded-full border transition-colors
-                ${filter === f
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-gray-600 border-gray-300 hover:border-blue-400"}`}
+              className={`text-xs px-2.5 py-1 rounded border transition-colors
+                ${
+                  filter === f
+                    ? "bg-primary text-white border-primary"
+                    : "bg-surface text-muted border-line hover:border-primary/50"
+                }`}
             >
-              {f === "all" ? "All Tests" : `Abnormal (${abnormal.length})`}
+              {f === "all" ? "All tests" : `Abnormal (${abnormal.length})`}
             </button>
           ))}
         </div>
@@ -84,6 +83,6 @@ export default function AbnormalFlags({ flags }) {
           <FlagCard key={i} flag={flag} />
         ))}
       </div>
-    </div> 
-  ) 
+    </div>
+  )
 }

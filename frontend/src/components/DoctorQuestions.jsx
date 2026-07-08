@@ -11,26 +11,20 @@ export default function DoctorQuestions({ questions }) {
   }
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">💬</span>
-          <h2 className="font-semibold text-gray-800">Questions to Ask Your Doctor</h2>
-        </div>
+    <div className="bg-surface border border-line rounded-lg p-4">
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="font-semibold text-ink text-sm">Questions to ask your doctor</h2>
         <button
           onClick={copyAll}
-          className="text-xs text-blue-600 hover:underline"
+          className="text-xs font-medium text-primary hover:underline"
         >
-          {copied ? "✅ Copied!" : "📋 Copy all"}
+          {copied ? "Copied" : "Copy all"}
         </button>
       </div>
-      <ol className="space-y-2">
+      <ol className="space-y-2 list-decimal list-inside">
         {questions.map((q, i) => (
-          <li key={i} className="flex gap-3 items-start">
-            <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-700 rounded-full text-xs flex items-center justify-center font-medium mt-0.5">
-              {i + 1}
-            </span>
-            <p className="text-sm text-gray-700 leading-relaxed">{q}</p>
+          <li key={i} className="text-sm text-ink/90 leading-relaxed">
+            {q}
           </li>
         ))}
       </ol>
