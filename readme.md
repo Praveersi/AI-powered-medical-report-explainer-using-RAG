@@ -91,6 +91,6 @@ MAX_FILE_MB=15
 
 <div align="center">
 
-Built by [Your Name](https://linkedin.com/in/yourprofile) · ⭐ Star if this helped you!
+Built by (https://www.linkedin.com/in/sagar-srivastava-68aa02327/) · ⭐ Star if this helped you!
 
 </div>
