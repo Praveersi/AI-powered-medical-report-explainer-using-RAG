@@ -45,8 +45,7 @@ User question → embed query → FAISS top-6 chunks → Groq Llama 3.1 70B → 
 | **Backend** | FastAPI, Python 3.11 |
 | **RAG** | LangChain, FAISS, sentence-transformers (local) |
 | **LLM** | Groq API — Llama 3.1 70B (free tier) |
-| **PDF** | PyMuPDF + pdfplumber |
-| **Deploy** | Vercel (frontend) + Render.com (backend) — both free |
+| **PDF** | PyMuPDF + pdfplumber | 
 
 ---
 
